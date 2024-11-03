@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Header styling */
+.main {
+    margin-bottom: 20px;
+}
+
+.main h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.main input {
+    width: 60%;
+    padding: 10px;
+    border: 3px solid #333;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 4px 4px 0 #333;
+    background-color: #fffbcc;
+}
+
+.main button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: 3px solid #333;
+    border-radius: 5px;
+    background-color: #ff7f50;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #333;
+    transition: transform 0.1s ease;
+}
+
+.main button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #333;
+}
+
+.main button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #333;
+}
+
+/* Profile section styling */
+#profileInfo {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fffbcc;
+    border: 3px solid #333;
+    border-radius: 10px;
+    box-shadow: 6px 6px 0 #333;
+    text-align: center;
+}
+
+#profileInfo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #333;
+}
+
+#profileInfo h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#profileInfo p {
+    margin: 5px 0;
+    color: #333;
+}
+
+/* Repository section styling */
+.reposInfo {
+    margin-top: 20px;
+}
+
+.reposInfo h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #ff7f50;
+}
+
+/* Repository card */
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background-color: #d3e0ea; /* Light blue background for distinction */
+    border: 2px solid #0a3d62; /* Darker blue border */
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 #0a3d62;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: #0a3d62;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.card-subHeading {
+    font-size: 1rem;
+    color: #3c6382;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.card-text p {
+    margin: 5px 0;
+}
+
+.card button {
+    padding: 8px 12px;
+    border: 2px solid #0a3d62;
+    border-radius: 5px;
+    background-color: #0a3d62;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #0a3d62;
+    transition: transform 0.1s ease;
+}
+
+.card button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #0a3d62;
+}
+
+.card button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.card button a:hover {
+    text-decoration: underline;
+}
