@@ -1,84 +1,90 @@
-console.log('github wrapper');
-
 const userNameInput = document.getElementById('userName');
 const showDetailsButton = document.getElementById('showDetails');
-const profileInfoDiv = document.getElementById('profileInfo')
-const repoInfoDiv = document.getElementById('reposInfo')
+const profileInfoDiv = document.getElementById('profileInfo');
+const reposInfoDiv = document.getElementById('reposInfo');
 
-function showRepoInfo(userName){
-    fetch(`https://api.github.com/users/${userName}/repos?per_page=30&sort=updated`)
-    .then((res) => res.json())
-    .then((projects) => {
-        console.log(projects);
-        for(let i=0;i<projects.length;i++){
-            repoInfoDiv.innerHTML += `<div class="card">
-                
-                <div class="card-title">
-                    <div class="card-title">${projects[i].name}</div>
-                    <div class="card-subHeading">${projects[i].language}</div>
-                    <div class="card-text">
-                    <p>${projects[i].description || 'No description available'}</p>
-                    <p>Stars: ${projects[i].stargazers_count}, Forks: ${projects[i].forks_count}</p>
-                        <p>Created on: ${new Date(projects[i].created_at).toLocaleDateString()}</p>
-                        <p>Last updated: ${new Date(projects[i].updated_at).toLocaleDateString()}</p>
-                    
+// using async and await
+showDetailsButton.addEventListener('click', async () => {
+    const userName = userNameInput.value.trim();
+
+    if (!userName) {
+        profileInfoDiv.innerHTML = '<p>Please enter a GitHub username.</p>';
+        return;
+    }
+
+    // Clear previous data and show loading state
+    profileInfoDiv.innerHTML = '<p>Loading profile...</p>';
+    reposInfoDiv.innerHTML = '<p>Loading repositories...</p>';
+
+    try {
+        // Fetch user profile
+        const res = await fetch(`https://api.github.com/users/${userName}`);
+        
+        if (!res.ok) throw new Error('User not found');
+        
+        const data = await res.json();
+        showProfile(data);
+        showReposInfo(userName);
+    } catch (error) {
+        profileInfoDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        reposInfoDiv.innerHTML = ''; // Clear repos info if there's an error
+    }
+});
+
+function showProfile(data) {
+    profileInfoDiv.innerHTML = `
+        <div class="card">
+            <div class="card-img">
+                <img src="${data.avatar_url}" alt="${data.name}">
+            </div>
+            <div class="card-body">
+                <div class="card-title">${data.name || 'Name not available'}</div>
+                <div class="card-subHeading">@${data.login}</div>
+                <div class="card-text">
+                    <p>${data.bio || 'No bio available'}</p>
+                    <p>${data.followers} followers, ${data.following} following</p>
                     <button>
-                        <a href=${projects[i].html_url}>
-                        Do CheckOUt
+                        <a href="${data.html_url}" target="_blank" rel="noopener noreferrer">
+                            View Profile
                         </a>
                     </button>
-                    ${
-                        projects[i].homepage 
-                        ? `<p><a href="${projects[i].homepage}" target="_blank">Visit Project Website</a></p>`
-                        : `<p>No homepage available</p>`
-                    }
-                    </div>
                 </div>
-            </div>`
-        }
-        
-    })
+            </div>
+        </div>`;
 }
 
-showDetailsButton.addEventListener('click',() => {
-    const userName = userNameInput.value;
-    
-    // request the data from server: fetch api
-    fetch(`https://api.github.com/users/${userName}`)
-        .then((res) => res.json())
-        .then((data) =>{
-            // console.log(data);
-            profileInfoDiv.innerHTML = `<div class="card">
-                <div class="card-img">
-                    <img src= ${data.avatar_url} alt=${data.name} srcset="">
-                </div>
-                <div class="card-title">
-                    <div class="card-title">${data.name}</div>
-                    <div class="card-subHeading">${data.login}</div>
-                    <div class="card-text">
-                    <p>${data.bio}</p>
-                    <p>${data.followers} followers ${data.following} following</p> 
+async function showReposInfo(userName) {
+    try {
+        const res = await fetch(`https://api.github.com/users/${userName}/repos?per_page=30&sort=updated`);
+        
+        if (!res.ok) throw new Error('Could not fetch repositories');
+        
+        const projects = await res.json();
+        reposInfoDiv.innerHTML = ''; // Clear loading message after fetch
+
+        if (projects.length === 0) {
+            reposInfoDiv.innerHTML = '<p>No repositories available.</p>';
+            return;
+        }
+
+        projects.forEach((project) => {
+            reposInfoDiv.innerHTML += `
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">${project.name}</div>
+                        <div class="card-subHeading">${project.language || 'Language not specified'}</div>
+                        <div class="card-text">
+                            <p>${project.description || 'No description available'}</p>
+                            <button>
+                                <a href="${project.html_url}" target="_blank" rel="noopener noreferrer">
+                                    View Project
+                                </a>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>`
-
-            
-            showRepoInfo(userName);
-        })
-
-
-    
-})
-
-// Promises , resolve, reject, pending
-// const p = new Promise((resolve,reject) =>{
-//     const x = 1+5;
-//     if(x===2){
-//         resolve('Success');
-//     }else{
-//         reject('Failed');
-//     }
-// })
-
-// // then will be executed whn promise resolve, otherwise catch will be executed
-// p.then((data) => console.log(data)).catch((err) => console.log(err))
+                </div>`;
+        });
+    } catch (error) {
+        reposInfoDiv.innerHTML = `<p>Error loading repositories: ${error.message}</p>`;
+    }
+}
